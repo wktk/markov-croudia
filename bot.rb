@@ -73,7 +73,7 @@ class Bot
 
 private
   def dictionary_from_timeline
-    tl = croudia.home_timeline.reject! do |status|
+    tl = croudia.home_timeline(count: 40).reject! do |status|
       status.user.protected || URI.regexp.match(status.text)
     end.map! do |status|
       status.text.gsub(/[@＠]\w+/, '')
