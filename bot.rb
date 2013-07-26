@@ -98,6 +98,7 @@ private
       break if 'BOS/EOS' == word
       status << word
       break if status.size > MAX_TEXT_LENGTH
+      prev = word
     end
     status
   end
