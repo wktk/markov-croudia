@@ -75,7 +75,9 @@ private
   def dictionary_from_timeline
     tl = croudia.home_timeline.reject! do |status|
       status.user.protected || URI.regexp.match(status.text)
-    end.map!(&:text)
+    end.map! do |status|
+      status.text.gsub(/[@＠]\w+/, '')
+    end
     dictionary = Hash.new([].freeze)
     tl.each do |text|
       words = tagger.wakati(text)
