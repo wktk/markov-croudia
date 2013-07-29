@@ -29,7 +29,12 @@ class Bot
     )
     croudia.access_token = at.access_token
     Option.refresh_token = at.refresh_token
-    timer.mins_after(at.expires_in / 120) { refresh_token }
+  rescue
+    next_refresh = 1
+  else
+    next_refresh = at.expires_in / 120
+  ensure
+    timer.mins_after(next_refresh) { refresh_token }
   end
 
   def update
