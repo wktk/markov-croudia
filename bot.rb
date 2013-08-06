@@ -78,11 +78,12 @@ class Bot
 
 private
   def dictionary_from_timeline
-    tl = croudia.home_timeline(count: 40).reject! do |status|
+    tl = croudia.home_timeline(count: 200).reject! do |status|
       status.user.protected || URI.regexp.match(status.text)
     end.map! do |status|
       status.text.gsub(/[@＠]\w+/, '')
     end
+    tl = tl[0...40]
     dictionary = Hash.new([].freeze)
     tl.each do |text|
       words = tagger.wakati(text)
