@@ -4,19 +4,14 @@ GIT
   specs:
     okura (0.0.1)
 
-GIT
-  remote: git://github.com/wktk/croudia-gem.git
-  revision: 206b0368e0d3538c7735ab39ae8d6eca7e9ed326
-  specs:
-    croudia (1.0.8)
-      faraday (~> 0.8.7)
-      faraday_middleware (~> 0.9.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.5)
     bcrypt-ruby (3.1.1)
+    croudia (1.0.10)
+      faraday (~> 0.8.7)
+      faraday_middleware (~> 0.9.0)
     data_mapper (1.2.0)
       dm-aggregates (~> 1.2.0)
       dm-constraints (~> 1.2.0)
@@ -65,14 +60,14 @@ GEM
       dm-core (~> 1.2.0)
     do_postgres (0.10.13)
       data_objects (= 0.10.13)
-    faraday (0.8.7)
-      multipart-post (~> 1.1)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     fastercsv (1.5.5)
     json (1.8.0)
     json_pure (1.8.0)
-    multi_json (1.7.7)
+    multi_json (1.7.9)
     multipart-post (1.2.0)
     stringex (1.5.1)
     uuidtools (2.1.4)
@@ -81,7 +76,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  croudia!
+  croudia
   data_mapper
   dm-postgres-adapter
   okura!
