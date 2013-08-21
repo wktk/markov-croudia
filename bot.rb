@@ -22,7 +22,7 @@ class Bot
   end
 
   def refresh_token
-    rt = DB.refresh_token || ENV['INITIAL_REFRESH_TOKEN']
+    rt = DB.refresh_token
     at = croudia.get_access_token(
       grant_type: :refresh_token,
       refresh_token: rt
