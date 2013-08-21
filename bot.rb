@@ -12,7 +12,7 @@ class Bot
   def initialize
     @croudia = Croudia::Client.new
     @tagger = Okura::Serializer::FormatInfo.create_tagger('naist-jdic')
-    @timer = Timer.new(Time.at(Option.last_time.to_i))
+    @timer = Timer.new(Time.at(DB.last_time.to_i))
   end
 
   def register
@@ -22,13 +22,13 @@ class Bot
   end
 
   def refresh_token
-    rt = Option.refresh_token || ENV['INITIAL_REFRESH_TOKEN']
+    rt = DB.refresh_token || ENV['INITIAL_REFRESH_TOKEN']
     at = croudia.get_access_token(
       grant_type: :refresh_token,
       refresh_token: rt
     )
     croudia.access_token = at.access_token
-    Option.refresh_token = at.refresh_token
+    DB.refresh_token = at.refresh_token
   rescue
     next_refresh = 1
   else
@@ -46,11 +46,11 @@ class Bot
         break
       end
     end
-    Option.last_time = timer.last_time.to_i
+    DB.last_time = timer.last_time.to_i
   end
 
   def reply
-    last_id = Option.last_replied_id
+    last_id = DB.last_replied_id
     mentions = croudia.mentions.select { |s| s.id > last_id }
     return if mentions.empty?
     dictionary, originals = dictionary_from_timeline
@@ -68,8 +68,8 @@ class Bot
         end
       end
     end
-    Option.last_replied_id = replied.max
-    Option.last_time = timer.last_time.to_i
+    DB.last_replied_id = replied.max
+    DB.last_time = timer.last_time.to_i
   end
 
   def join

@@ -2,7 +2,7 @@ require 'data_mapper'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'])
 
-class Option
+class DB
   include DataMapper::Resource
 
   property :name, String, length: 255, key: true
