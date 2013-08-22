@@ -2,7 +2,7 @@
 require 'croudia'
 require 'okura/serializer'
 require './timer'
-require './models'
+require './db'
 
 class Bot
   MAX_TEXT_LENGTH = 372
