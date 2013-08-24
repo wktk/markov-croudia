@@ -9,7 +9,7 @@ GEM
   specs:
     addressable (2.3.5)
     bcrypt-ruby (3.1.1)
-    croudia (1.0.11)
+    croudia (1.0.12)
       faraday (~> 0.8.7)
       faraday_middleware (~> 0.9.0)
     data_mapper (1.2.0)
