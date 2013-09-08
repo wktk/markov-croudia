@@ -72,6 +72,31 @@ class Bot
     DB.last_time = timer.last_time.to_i
   end
 
+  def update_friendships
+    current_user = croudia.current_user
+
+    friends = []
+    cursor = -1
+    while cursor.nonzero?
+      ids = croudia.friend_ids(current_user, cursor: cursor, count: 100)
+      friends.push(*ids.ids)
+      cursor = ids.next_cursor
+    end
+
+    followers = []
+    cursor = -1
+    while cursor.nonzero?
+      ids = croudia.follower_ids(current_user, cursor: cursor, count: 100)
+      followers.push(*ids.ids)
+      cursor = ids.next_cursor
+    end
+
+    users_to_follow = (followers - friends).reverse
+    users_to_unfollow = (friends - followers).reverse
+    users_to_follow.map! { |id| croudia.follow(id) }
+    users_to_unfollow.map! { |id| croudia.unfollow(id) }
+  end
+
   def join
     timer.join
   end

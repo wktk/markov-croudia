@@ -8,8 +8,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.5)
-    bcrypt-ruby (3.1.1)
-    croudia (1.0.12)
+    bcrypt-ruby (3.1.2)
+    croudia (1.0.13)
       faraday (~> 0.8.7)
       faraday_middleware (~> 0.9.0)
     data_mapper (1.2.0)
@@ -67,7 +67,7 @@ GEM
     fastercsv (1.5.5)
     json (1.8.0)
     json_pure (1.8.0)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     multipart-post (1.2.0)
     rake (10.1.0)
     stringex (1.5.1)
