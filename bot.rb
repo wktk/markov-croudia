@@ -50,25 +50,33 @@ class Bot
   end
 
   def reply
-    last_id = DB.last_replied_id
-    mentions = croudia.mentions.select { |s| s.id > last_id }
+    last_id = DB.last_replied_status.to_i
+    mentions = croudia.mentions(count: 200, since_id: last_id)
     return if mentions.empty?
+
     dictionary, originals = dictionary_from_timeline
-    replied = []
+    replied_statuses = []
+    replied_users = []
     mentions.reverse.each do |mention|
+      if replied_users.include?(mention.user.id)
+        replied_statuses << mention.id
+        next
+      end
+
       100.times do
         status = create_from dictionary
         unless originals.include?(status)
           @croudia.update(
-            "@#{mention.user.screen_name} #{status}"[0...MAX_LENGTH],
+            "@#{mention.user.screen_name} #{status}"[0...MAX_TEXT_LENGTH],
             in_reply_to_status_id: mention.id_str
           )
-          replied << mention.id
+          replied_statuses << mention.id
+          replied_users << mention.user.id
           break
         end
       end
     end
-    DB.last_replied_id = replied.max
+    DB.last_replied_status = replied_statuses.max
     DB.last_time = timer.last_time.to_i
   end
 
