@@ -20,3 +20,17 @@ task :auth, [:code] do |t, args|
 
   puts "Refresh token for @#{user.screen_name} has been added to the DB"
 end
+
+task :last_reply, [:status_id] do |t, args|
+  print 'Verifying the DB...  '
+  require './db'
+  puts 'done.'
+
+  if args[:status_id]
+    print 'Updating last_replied_status...  '
+    DB.last_replied_status = args[:status_id]
+    puts 'done.'
+  else
+    puts "Current last_replied_status is #{DB.last_replied_status}"
+  end
+end
