@@ -42,7 +42,14 @@ class Bot
     100.times do
       status = create_from dictionary
       unless originals.include?(status)
-        croudia.update(status[0...MAX_TEXT_LENGTH])
+        begin
+          croudia.update(status[0...MAX_TEXT_LENGTH])
+        rescue Croudia::Error::BadRequest
+          retry_count ||= 0
+          retry_count += 1
+          sleep(4)
+          retry if retry_count < 5
+        end
         break
       end
     end
@@ -66,15 +73,22 @@ class Bot
       100.times do
         status = create_from dictionary
         unless originals.include?(status)
-          @croudia.update(
-            "@#{mention.user.screen_name} #{status}"[0...MAX_TEXT_LENGTH],
-            in_reply_to_status_id: mention.id_str
-          )
-          replied_statuses << mention.id
-          replied_users << mention.user.id
+          begin
+            @croudia.update(
+              "@#{mention.user.screen_name} #{status}"[0...MAX_TEXT_LENGTH],
+              in_reply_to_status_id: mention.id_str
+            )
+          rescue Croudia::Error::BadRequest
+            retry_count ||= 0
+            retry_count += 1
+            sleep(4)
+            retry if retry_count < 5
+          end
           break
         end
       end
+      replied_statuses << mention.id
+      replied_users << mention.user.id
     end
     DB.last_replied_status = replied_statuses.max
     DB.last_time = timer.last_time.to_i
