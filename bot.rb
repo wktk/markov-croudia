@@ -55,7 +55,7 @@ class Bot
     return if mentions.empty?
 
     dictionary, originals = dictionary_from_timeline
-    replied_statuses = []
+    replied_statuses = [last_id]
     replied_users = []
     mentions.reverse.each do |mention|
       if replied_users.include?(mention.user.id)
