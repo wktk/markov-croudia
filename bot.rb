@@ -93,7 +93,7 @@ class Bot
     (@last_replied_status_mutex ||= Mutex.new).synchronize do
       last_replied_status = DB.last_replied_status.to_i
 
-      if new_value && last_replied_status > new_value.to_i
+      if new_value && last_replied_status < new_value.to_i
         DB.last_replied_status = new_value
         last_replied_status = new_value
       end
