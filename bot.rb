@@ -57,18 +57,14 @@ class Bot
   end
 
   def reply
-    last_id = DB.last_replied_status.to_i
-    mentions = croudia.mentions(count: 200, since_id: last_id)
+    mentions = croudia.mentions(count: 200, since_id: last_replied_status)
     return if mentions.empty?
 
     dictionary, originals = dictionary_from_timeline
-    replied_statuses = [last_id]
     replied_users = []
     mentions.reverse.each do |mention|
-      if replied_users.include?(mention.user.id)
-        replied_statuses << mention.id
-        next
-      end
+      last_replied_status(mention.id)
+      next if replied_users.include?(mention.user.id)
 
       100.times do
         status = create_from dictionary
@@ -87,11 +83,22 @@ class Bot
           break
         end
       end
-      replied_statuses << mention.id
       replied_users << mention.user.id
     end
-    DB.last_replied_status = replied_statuses.max
     DB.last_time = timer.last_time.to_i
+  end
+
+  def last_replied_status(new_value=nil)
+    last_replied_status = nil
+    (@last_replied_status_mutex ||= Mutex.new).synchronize do
+      last_replied_status = DB.last_replied_status.to_i
+
+      if new_value && last_replied_status > new_value.to_i
+        DB.last_replied_status = new_value
+        last_replied_status = new_value
+      end
+    end
+    last_replied_status
   end
 
   def update_friendships
